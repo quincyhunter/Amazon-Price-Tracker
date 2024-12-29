@@ -1,3 +1,4 @@
+import { PageProps } from "@/.next/types/app/page";
 import Modal from "@/components/Modal";
 import PriceInfoCard from "@/components/PriceInfoCard";
 import ProductCard from "@/components/ProductCard";
@@ -11,9 +12,10 @@ import { redirect } from "next/navigation";
 export default async function ProductDetails({
   params,
 }: {
-  params: { id: string };
+  params: { id: string }; // <-- Inline type for params
 }) {
   const product: Product | null = await getProductById(params.id);
+
 
   // If no product, redirect to homepage
   if (!product) redirect("/");
