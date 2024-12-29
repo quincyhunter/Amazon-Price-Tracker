@@ -1,7 +1,7 @@
 import Modal from "@/components/Modal";
 import PriceInfoCard from "@/components/PriceInfoCard";
 import ProductCard from "@/components/ProductCard";
-import { getProductById, getSimilarProducts } from "@/lib/actions"
+import { getProductById, getSimilarProducts } from "@/lib/actions";
 import { formatNumber } from "@/lib/utils";
 import { Product } from "@/types";
 import Image from "next/image";
@@ -11,18 +11,23 @@ import { redirect } from "next/navigation";
 export default async function ProductDetails({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const product: Product | null = await getProductById(params.id);
+  // 1) Await the Promise
+  const { id } = await params;
+
+  // 2) Fetch product
+  const product: Product | null = await getProductById(id);
   if (!product) redirect("/");
 
-  const similarProducts = await getSimilarProducts(params.id);
+  // 3) Fetch similar products
+  const similarProducts = await getSimilarProducts(id);
 
   return (
     <div className="product-container">
       <div className="flex gap-28 xl:flex-row flex-col">
         <div className="product-image">
-          <Image 
+          <Image
             src={product.image}
             alt={product.title}
             width={580}
@@ -55,12 +60,10 @@ export default async function ProductDetails({
                   width={20}
                   height={20}
                 />
-
                 <p className="text-base font-semibold text-[#D46F77]">
                   {product.reviewsCount}
                 </p>
               </div>
-
               <div className="p-2 bg-white-200 rounded-10">
                 <Image 
                   src="/assets/icons/bookmark.svg"
@@ -69,7 +72,6 @@ export default async function ProductDetails({
                   height={20}
                 />
               </div>
-
               <div className="p-2 bg-white-200 rounded-10">
                 <Image 
                   src="/assets/icons/share.svg"
@@ -101,7 +103,7 @@ export default async function ProductDetails({
                     height={16}
                   />
                   <p className="text-sm text-primary-orange font-semibold">
-                    {product.stars || '25'}
+                    {product.stars ?? "25"}
                   </p>
                 </div>
 
@@ -120,41 +122,42 @@ export default async function ProductDetails({
 
               <p className="text-sm text-black opacity-50">
                 <span className="text-primary-green font-semibold">93% </span> of
-                buyers have recommeded this.
+                buyers have recommended this.
               </p>
             </div>
           </div>
 
           <div className="my-7 flex flex-col gap-5">
             <div className="flex gap-5 flex-wrap">
-              <PriceInfoCard 
+              <PriceInfoCard
                 title="Current Price"
                 iconSrc="/assets/icons/price-tag.svg"
                 value={`${product.currency} ${formatNumber(product.currentPrice)}`}
-                borderColor = "b6dbff"
+                borderColor="b6dbff"
               />
-              <PriceInfoCard 
+              <PriceInfoCard
                 title="Average Price"
                 iconSrc="/assets/icons/chart.svg"
                 value={`${product.currency} ${formatNumber(product.average)}`}
-                borderColor = "b6dbff"
+                borderColor="b6dbff"
               />
-              <PriceInfoCard 
+              <PriceInfoCard
                 title="Highest Price"
                 iconSrc="/assets/icons/arrow-up.svg"
                 value={`${product.currency} ${formatNumber(product.highestPrice)}`}
-                borderColor = "b6dbff"
+                borderColor="b6dbff"
               />
-              <PriceInfoCard 
+              <PriceInfoCard
                 title="Lowest Price"
                 iconSrc="/assets/icons/arrow-down.svg"
                 value={`${product.currency} ${formatNumber(product.lowestPrice)}`}
-                borderColor = "b6dbff"
+                borderColor="b6dbff"
               />
             </div>
           </div>
 
-          <Modal productId={params.id} />
+          {/* Pass `id` rather than `params.id` */}
+          <Modal productId={id} />
         </div>
       </div>
 
@@ -165,12 +168,12 @@ export default async function ProductDetails({
           </h3>
 
           <div className="flex flex-col gap-4">
-            {product?.description?.split('\n')}
+            {product?.description?.split("\n")}
           </div>
         </div>
 
         <button className="btn w-fit mx-auto flex items-center justify-center gap-3 min-w-[200px]">
-          <Image 
+          <Image
             src="/assets/icons/bag.svg"
             alt="check"
             width={22}
@@ -183,10 +186,9 @@ export default async function ProductDetails({
         </button>
       </div>
 
-      {similarProducts && similarProducts?.length > 0 && (
+      {similarProducts && similarProducts.length > 0 && (
         <div className="py-14 flex flex-col gap-2 w-full">
           <p className="section-text">Similar Products</p>
-
           <div className="flex flex-wrap gap-10 mt-7 w-full">
             {similarProducts.map((product) => (
               <ProductCard key={product._id} product={product} />
@@ -195,6 +197,5 @@ export default async function ProductDetails({
         </div>
       )}
     </div>
-  )
+  );
 }
-
