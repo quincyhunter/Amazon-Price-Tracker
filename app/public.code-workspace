@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "public",
+			"path": "../../Downloads/scraping_public/public"
+		},
+		{
+			"name": "pricewise",
+			"path": ".."
+		}
+	],
+	"settings": {}
+}
