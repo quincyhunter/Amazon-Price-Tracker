@@ -8,16 +8,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-type Props = {
-  params: { id: string }
+interface ProductDetailsPageProps {
+  params: {
+    id: string;
+  };
 }
 
-const ProductDetails = async ({ params: { id } }: Props) => {
-  const product: Product = await getProductById(id);
+const ProductDetails = async ({params} : ProductDetailsPageProps) => {
+  const product: Product = await getProductById(params.id);
 
   if(!product) redirect('/')
 
-  const similarProducts = await getSimilarProducts(id);
+  const similarProducts = await getSimilarProducts(params.id);
 
   return (
     <div className="product-container">
@@ -137,7 +139,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
               <PriceInfoCard 
                 title="Average Price"
                 iconSrc="/assets/icons/chart.svg"
-                value={`${product.currency} ${formatNumber(product.averagePrice)}`}
+                value={`${product.currency} ${formatNumber(product.average)}`}
                 borderColor="b6dbff"
               />
               <PriceInfoCard 
@@ -155,7 +157,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
             </div>
           </div>
 
-          <Modal productId={id} />
+          <Modal productId={params.id} />
         </div>
       </div>
 
