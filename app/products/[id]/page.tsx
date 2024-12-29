@@ -8,16 +8,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-type Props = {
-  params: { id: string }
-}
+export default async function ProductDetails({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const product: Product | null = await getProductById(params.id);
+  if (!product) redirect("/");
 
-const ProductDetails = async ({ params: { id } }: Props) => {
-  const product: Product = await getProductById(id);
-
-  if(!product) redirect('/')
-
-  const similarProducts = await getSimilarProducts(id);
+  const similarProducts = await getSimilarProducts(params.id);
 
   return (
     <div className="product-container">
@@ -155,7 +154,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
             </div>
           </div>
 
-          <Modal productId={id} />
+          <Modal productId={params.id} />
         </div>
       </div>
 
@@ -199,4 +198,3 @@ const ProductDetails = async ({ params: { id } }: Props) => {
   )
 }
 
-export default ProductDetails
