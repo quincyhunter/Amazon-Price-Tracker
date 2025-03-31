@@ -5,6 +5,10 @@ import HeroCarousel from '@/components/HeroCarousel'
 import { getAllProducts } from '@/lib/actions'
 import ProductCard from '@/components/ProductCard'
 
+// Add dynamic rendering configuration
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 const Home = async () => {
   const allProducts = await getAllProducts();
   return (
