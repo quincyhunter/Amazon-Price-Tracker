@@ -5,7 +5,6 @@ import HeroCarousel from '@/components/HeroCarousel'
 import { getAllProducts } from '@/lib/actions'
 import ProductCard from '@/components/ProductCard'
 
-// Add dynamic rendering configuration
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
@@ -28,7 +27,7 @@ const Home = async () => {
 
             <h1 className="head-text">
               Unleash the Power of
-              <span className="text-primary"> Pricewise</span>
+              <span className="text-primary"> Amazon Price Tracker</span>
             </h1>
 
             <p className="mt-6">
